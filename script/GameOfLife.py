@@ -14,7 +14,7 @@ class GameOfLife(Simulation):
         self._spheres.append([[0 for y in range(self._h)] for x in range(self._w)])
         for x in range(self._w):
             for y in range(self._h):
-                if random.random() < 0.5:
+                if random.random() < 0.1:
                     self._spheres[0][x][y] = 1
                     builtins.updated[0].append((x,y,self._colors[0][1]))
                 else:

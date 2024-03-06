@@ -8,25 +8,25 @@ import builtins
 #initialize pygame window and global variables
 pygame.init()
 pygame.display.set_caption("Simulation")
-w = 100
+w = 106
 h = 80
 dx = 12
 dy = 12
 screen = pygame.display.set_mode((w*dx,h*dy))
-builtins.updated = [[]]
+builtins.updated = [[],[]]
 
-def draw(drawn_spheres):
-    for sphere in drawn_spheres:
-        while len(updated[sphere]) > 0:
-            x = updated[sphere][0][0]
-            y = updated[sphere][0][1]
-            color = updated[sphere][0][2]
-            screen.fill(color,(x*dx,y*dy,dx,dy))
-            updated[sphere].pop(0)
+def draw(sphere):
+    while len(updated[sphere]) > 0:
+        x = updated[sphere][0][0]
+        y = updated[sphere][0][1]
+        color = updated[sphere][0][2]
+        screen.fill(color,(x*dx,y*dy,dx,dy))
+        updated[sphere].pop(0)
 
 def main():
     # initialize variables
     last_tick = 0
+    draw_sphere = 0
     sleep_time = 1
     sleeps = (0, 0.1, 0.25, 0.5, 1, float("inf"))
 
@@ -51,6 +51,9 @@ def main():
                     sleep_time = max(sleep_time - 1, 0)
                 if event.key == pygame.K_RIGHT:
                     sleep_time = min(sleep_time + 1, 5)
+                if event.key == pygame.K_d:
+                    draw_sphere = (draw_sphere + 1) % 2
+                    screen.fill((0,0,0))
         
             # handle click
             if event.type == pygame.MOUSEBUTTONDOWN:
@@ -63,7 +66,7 @@ def main():
                 print("should quit")
                 break
         else: 
-            draw([0])
+            draw(draw_sphere)
             pygame.display.flip()
             continue
         break

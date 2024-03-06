@@ -24,13 +24,23 @@ class Simulation:
         + int(self.get_cell(sphere, x-1, y+1) == cell_type) \
         + int(self.get_cell(sphere, x, y+1) == cell_type) \
         + int(self.get_cell(sphere, x+1, y+1) == cell_type)
-        
-        for i in range(-1,2):
-            for j in range(-1,2):
-                neighbors += self._spheres[sphere][(x+i+self._w) % self._w][(y+j+self._h) % self._h]
+    
+    def _sum(self, sphere, x, y):
+        return self.get_cell(sphere, x-1, y-1) \
+        + self.get_cell(sphere, x, y-1) \
+        + self.get_cell(sphere, x+1, y-1) \
+        + self.get_cell(sphere, x-1, y) \
+        + self.get_cell(sphere, x+1, y) \
+        + self.get_cell(sphere, x-1, y+1) \
+        + self.get_cell(sphere, x, y+1) \
+        + self.get_cell(sphere, x+1, y+1) \
+        + self.get_cell(sphere, x, y)
     
     def get_cell(self, sphere, x, y):
         return self._spheres[sphere][(x+self._w) % self._w][(y+self._h) % self._h]
+    
+    def set_cell(self, sphere, x, y, cell_type):
+        self._spheres[sphere][(x+self._w) % self._w][(y+self._h) % self._h] = cell_type
     
     def get_sphere(self, sphere):
         return self._spheres[sphere]
