@@ -22,6 +22,9 @@ def draw(sphere):
         color = updated[sphere][0][2]
         screen.fill(color,(x*dx,y*dy,dx,dy))
         updated[sphere].pop(0)
+    
+    for i in range(len(updated)):
+        updated[i] = []
 
 def main():
     # initialize variables

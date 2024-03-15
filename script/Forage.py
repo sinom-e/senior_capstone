@@ -96,7 +96,7 @@ class Forage(Simulation):
         for y in range(0,self._h):
             for x in range(0,self._w):
                 new_scents[x][y] = (self._sum(2, x, y) / 9) - 0.001
-                builtins.updated[1].append((x,y,(new_scents[x][y]*128+128,new_scents[x][y]*128+128,new_scents[x][y]*128+128)))
+                builtins.updated[1].append((x,y,(min(max(new_scents[x][y]*128+128,0),255),min(max(new_scents[x][y]*128+128,0),255),min(max(new_scents[x][y]*128+128,0),255))))
         
         self._spheres[2] = new_scents
     
@@ -104,8 +104,6 @@ class Forage(Simulation):
         # find cell by integer dividing click position by cell size
         x = pos[0] // self._dx
         y = pos[1] // self._dy
-        # inline XOR, 0 becomes 1, 1 becomes 0
-        builtins.updated[0].append((self._ant_x,self._ant_y,(255,0,0)))
-        self._ant_x = x
-        self._ant_y = y
-        builtins.updated[0].append((self._ant_x,self._ant_y,(255,0,0)))
+        # plant flower
+        self._spheres[0][x][y] = 1
+        builtins.updated[0].append((x,y,self._colors[0][1]))
