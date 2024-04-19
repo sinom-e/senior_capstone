@@ -1,6 +1,7 @@
 class Simulation:
     _spheres = []
     _colors = []
+    _screens = 0
     _w = 0
     _h = 0
     _dx = 0
@@ -47,3 +48,7 @@ class Simulation:
     
     def get_color(self, cell_type):
         return self._colors[cell_type]
+    
+    @staticmethod
+    def n_screens():
+        return 1

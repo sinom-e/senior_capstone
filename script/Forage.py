@@ -107,3 +107,7 @@ class Forage(Simulation):
         # plant flower
         self._spheres[0][x][y] = 1
         builtins.updated[0].append((x,y,self._colors[0][1]))
+
+    @staticmethod
+    def n_screens():
+        return 2
