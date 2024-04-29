@@ -9,6 +9,7 @@ class Forage(Simulation):
         self._dx = dx
         self._dy = dy
         
+        self._spheres = []
         self._spheres.append([[0 for y in range(self._h)] for x in range(self._w)])
         self._spheres.append([[0 for y in range(self._h)] for x in range(self._w)])
         self._spheres.append([[0 for y in range(self._h)] for x in range(self._w)])

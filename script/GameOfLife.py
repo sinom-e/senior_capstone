@@ -11,6 +11,7 @@ class GameOfLife(Simulation):
         
         self._colors = [[(0,0,0),(0,255,0)]]
         
+        self._spheres = []
         self._spheres.append([[0 for y in range(self._h)] for x in range(self._w)])
         for x in range(self._w):
             for y in range(self._h):
@@ -51,4 +52,3 @@ class GameOfLife(Simulation):
         # inline XOR, 0 becomes 1, 1 becomes 0
         self._spheres[0][x][y] ^= 1
         builtins.updated[0].append((x,y,self._colors[0][self.get_cell(0,x,y)]))
-        print(self._neighbors(0, x, y, 1))

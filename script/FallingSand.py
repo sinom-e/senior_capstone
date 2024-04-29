@@ -18,6 +18,7 @@ class FallingSand(Simulation):
         
         self._colors = [[(0,0,0),(255,255,0),(127,127,127)]]
         
+        self._spheres = []
         self._spheres.append([[0 for y in range(self._h)] for x in range(self._w)])
         for x in range(self._w):
             for y in range(self._h):
@@ -60,8 +61,6 @@ class FallingSand(Simulation):
                             
                             builtins.updated[0].append((x,y,self._colors[0][0]))
                             builtins.updated[0].append(((x+1+self._w) % self._w,(y+1+self._h) % self._h,self._colors[0][1]))
-        
-        print(sand)
     
     def on_click(self, pos):
         # find cell by integer dividing click position by cell size

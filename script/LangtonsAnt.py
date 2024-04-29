@@ -15,6 +15,7 @@ class LangtonsAnt(Simulation):
         self._ant_x = self._w // 2
         self._ant_y = h // 2
         
+        self._spheres = []
         self._spheres.append([[0 for y in range(self._h)] for x in range(self._w)])
         
         self._colors = [[(0,0,0),(255,255,255)]]
