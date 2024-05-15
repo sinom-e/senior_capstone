@@ -23,6 +23,7 @@ class Forage(Simulation):
                     builtins.updated[0].append((x,y,self._colors[2][1]))
                 else:
                     self._spheres[1][x][y] = 0
+                    builtins.updated[0].append((x,y,self._colors[0][0]))
     
     def tick(self):
         ground = self._spheres[0]

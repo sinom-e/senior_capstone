@@ -2,6 +2,8 @@ import pygame
 import tkinter as tk
 import tkinter.ttk as ttk
 from tkinter.constants import *
+from tkinter import filedialog
+from pathlib import Path
 import os
 import random
 import time
@@ -9,7 +11,7 @@ import sys
 import importlib
 import builtins
 
-import ui
+import uitemp
 
 #initialize pygame window and global variables
 w = 100
@@ -18,6 +20,7 @@ psize = 12
 stopped = False
 sleep_time = 1
 sleeps = (0, 0.1, 0.25, 0.5, 1, 2.5, 5)
+life_class_name = "GameOfLife"
 life_class = None
 life = None
 draw_sphere = 0
@@ -26,7 +29,7 @@ root = tk.Tk()
 root.protocol( 'WM_DELETE_WINDOW' , root.destroy)
 
 _top1 = root
-_w1 = ui.Toplevel1(_top1)
+_w1 = uitemp.Toplevel1(_top1)
 
 embed_pygame = _w1.Frame1
 
@@ -88,6 +91,15 @@ def draw(sphere):
     for i in range(len(updated)):
         updated[i] = []
 
+def load_sim():
+    global life_class_name
+    
+    file_path = tk.filedialog.askopenfilename(filetypes=(("Simulation Script", "*.py"),), initialdir = os.getcwd())
+    
+    life_class_name = Path(file_path).stem
+    
+    init_sim()
+
 def init_sim():
     global root
     global _w1
@@ -108,9 +120,25 @@ def init_sim():
     _w1.Frame1.place(x=190, y=10, width=w*psize, height=h*psize)
     root.geometry(str(200+w*psize)+'x'+str(max(20+h*psize,470)))
     
-    life_class = getattr(importlib.import_module(sys.argv[1]), sys.argv[1])
-    life = life_class(w, h, psize, psize) 
+    life_class = getattr(importlib.import_module(life_class_name), life_class_name)
     builtins.updated = [[] for i in range(life_class.n_screens())]
+    life = life_class(w, h, psize, psize) 
+    
+    draw(draw_sphere)
+    pygame.display.flip()
+    root.update()
+
+def next_layer():
+    global draw_sphere
+    global life_class
+    global life
+    
+    if life_class.n_screens() > 1:
+        draw_sphere = (draw_sphere + 1) % life_class.n_screens()
+        screen.fill((0,0,0))
+
+load_button = _w1.Button5
+load_button.configure(command = load_sim)
 
 reset_button = _w1.Button6
 reset_button.configure(command = init_sim)
@@ -128,6 +156,9 @@ stop_start_button = _w1.Button4
 stop_start_button.configure(command = stop_start)
 step_button = _w1.Button2
 step_button.configure(command = step)
+
+layer_button = _w1.Button1_1
+layer_button.configure(command = next_layer)
     
 def main():
     # initialize variables

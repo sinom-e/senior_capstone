@@ -20,6 +20,7 @@ class GameOfLife(Simulation):
                     builtins.updated[0].append((x,y,self._colors[0][1]))
                 else:
                     self._spheres[0][x][y] = 0
+                    builtins.updated[0].append((x,y,self._colors[0][0]))
     
     def tick(self):
         # prepare a new array for updates so tick is global
