@@ -1,4 +1,5 @@
 class Simulation:
+    _parameters = []
     _spheres = []
     _colors = []
     _screens = 0
@@ -48,6 +49,16 @@ class Simulation:
     
     def get_color(self, cell_type):
         return self._colors[cell_type]
+    
+    def n_parameters(self):
+        return len(self._parameters)
+    
+    def get_parameter(self, parameter):
+        #parameter structure: 0:label 1:value 2:from 3:to 4:resolution
+        return self._parameters[parameter]
+    
+    def set_parameter(self, parameter, value):
+        self._parameters[parameter][1] = value
     
     @staticmethod
     def n_screens():

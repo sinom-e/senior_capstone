@@ -18,8 +18,6 @@ w = 100
 h = 80
 psize = 12
 stopped = False
-sleep_time = 1
-sleeps = (0, 0.1, 0.25, 0.5, 1, 2.5, 5)
 life_class_name = "GameOfLife"
 life_class = None
 life = None
@@ -46,14 +44,6 @@ def window_close():
     root.destroy()
     pygame.quit()
     sys.exit()
-
-def speed_up():
-    global sleep_time
-    sleep_time = max(sleep_time - 1, 0)
-
-def slow_down():
-    global sleep_time
-    sleep_time = min(sleep_time + 1, 5)
     
 def stop_start():
     global stop_start_button
@@ -70,11 +60,19 @@ def stop_start():
         stop_start_button.configure(text = "Start")
         step_button.configure(state = "active")
 
+def update_params():
+    global life
+    global param_sliders
+    
+    for i in range(0,life.n_parameters()):
+        life.set_parameter(i, param_sliders[i].get())
+
 def step():
     global life
     global draw_sphere
     global root
     
+    update_params()
     life.tick()
     draw(draw_sphere)
     pygame.display.flip()
@@ -105,6 +103,7 @@ def init_sim():
     global _w1
     global width_box
     global height_box
+    global param_sliders
     global life_class
     global life
     global w
@@ -118,11 +117,20 @@ def init_sim():
     psize = int(float(psize_box.get()))
     
     _w1.Frame1.place(x=190, y=10, width=w*psize, height=h*psize)
-    root.geometry(str(200+w*psize)+'x'+str(max(20+h*psize,470)))
     
     life_class = getattr(importlib.import_module(life_class_name), life_class_name)
     builtins.updated = [[] for i in range(life_class.n_screens())]
     life = life_class(w, h, psize, psize) 
+    
+    for i in range(0,life.n_parameters()):
+        param = life.get_parameter(i)
+        
+        #parameter structure: 0:label 1:value 2:from 3:to 4:resolution
+        param_sliders[i].configure(label = param[0], from_ = param[2], to = param[3], resolution = param[4])
+        param_sliders[i].set(param[1])
+    
+    root.geometry(str(200+w*psize)+'x'+str(max( max(20+h*psize,380), 380+70*life.n_parameters() )))
+    _w1.Controls.place(height = 115+70*life.n_parameters())
     
     draw(draw_sphere)
     pygame.display.flip()
@@ -147,10 +155,7 @@ width_box = _w1.Spinbox1
 height_box = _w1.Spinbox2
 psize_box = _w1.Spinbox3
 
-speed_up_button = _w1.Button3
-speed_up_button.configure(command = speed_up)
-slow_down_button = _w1.Button1
-slow_down_button.configure(command = slow_down)
+delay_slider = _w1.FrameScale
 
 stop_start_button = _w1.Button4
 stop_start_button.configure(command = stop_start)
@@ -159,24 +164,26 @@ step_button.configure(command = step)
 
 layer_button = _w1.Button1_1
 layer_button.configure(command = next_layer)
+
+param_sliders = [_w1.parameter_0, _w1.parameter_1, _w1.parameter_2, _w1.parameter_3, _w1.parameter_4]
     
 def main():
     # initialize variables
     last_tick = 0
     global draw_sphere
-    global sleep_time
-    global sleeps
     global life_class
     global life
     global root
     global stopped
+    global delay_slider
 
     # initialize game object, print directions
     init_sim()
     
     while 1:
         # tick after waiting sleep_time seconds
-        if time.time() >= last_tick + sleeps[sleep_time] and not stopped:
+        if time.time() >= last_tick + delay_slider.get()/1000 and not stopped:
+            update_params()
             life.tick()
             # print((time.time()-last_tick)*1000)
             last_tick = time.time()
@@ -187,10 +194,6 @@ def main():
             # possible wait times are pulled from a global list
             # max FPS, 10 FPS, 4 FPS, 2 FPS, 1 FPS, frozen
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_LEFT:
-                    sleep_time = max(sleep_time - 1, 0)
-                if event.key == pygame.K_RIGHT:
-                    sleep_time = min(sleep_time + 1, 5)
                 if event.key == pygame.K_d:
                     if life_class.n_screens() > 1:
                         draw_sphere = (draw_sphere + 1) % life_class.n_screens()
