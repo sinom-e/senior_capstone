@@ -32,7 +32,7 @@ class Toplevel1:
         top.minsize(120, 1)
         top.maxsize(5124, 1710)
         top.resizable(0,  0)
-        top.title("Toplevel 0")
+        top.title("Simulation Engine")
         top.configure(background="#d9d9d9")
         top.configure(cursor="arrow")
         top.configure(highlightbackground="#d9d9d9")
