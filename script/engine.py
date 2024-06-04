@@ -91,12 +91,19 @@ def draw(sphere):
 
 def load_sim():
     global life_class_name
+    old_life_class_name = life_class_name
     
-    file_path = tk.filedialog.askopenfilename(filetypes=(("Simulation Script", "*.py"),), initialdir = os.getcwd())
+    try:
+        file_path = tk.filedialog.askopenfilename(filetypes=(("Simulation Script", "*.py"),), initialdir = sys.path[0])
     
-    life_class_name = Path(file_path).stem
+        life_class_name = Path(file_path).stem
     
-    init_sim()
+        init_sim()
+    except:
+        print("Invalid simulation file")
+        life_class_name = old_life_class_name
+        
+        init_sim()
 
 def init_sim():
     global root
